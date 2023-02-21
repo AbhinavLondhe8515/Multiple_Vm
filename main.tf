@@ -78,7 +78,7 @@ storage_os_disk {
     name              = "${each.value.name}-os-disk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = each.value.disk_type
+#     managed_disk_type = each.value.disk_type
   }
 
 
