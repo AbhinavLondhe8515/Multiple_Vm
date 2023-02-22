@@ -1,112 +1,252 @@
-# Azure Provider
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.0.0"
-    }
-  }
-}
-
-# Configure the Microsoft Azure Provider
-provider "azurerm" {
-  features {}
-}
-
-
-variable "vm_details" {
+variable "vm_configurations" {
   type = map(object({
-    resource_group_name = string
-    name        = string
-    vm_size     = string
-    subnet_id   = string 
-    admin_username = string
-    admin_password = string
+    location         = string
+    resource_group   = string
+    network_interface_name = string
+    size             = string
+    admin_username   = string
+    admin_password   = string
   }))
-
   default = {
-    vm1 = {
-        resource_group_name = "example"
-      name = "vm1"
-      vm_size = "Standard_B1s"
-      subnet_id = "10.0.0.0/24"
-      admin_username = "abhinav"
-      admin_password = "abhinav123"
-    }
-    vm2 = {
-        resource_group_name = "example"
-      name = "vm2"
-      vm_size = "Standard_B1s"
-      subnet_id = "10.0.0.0/24"
-      admin_username = "abhinav"
-      admin_password = "abhinav123"
+    "vm1" = {
+      location         = "eastus"
+      resource_group   = "my-resource-group"
+      network_interface_name = "my-nic1"
+      size             = "Standard_B2s"
+      admin_username   = "myuser1"
+      admin_password   = "mypassword1"
+    },
+    "vm2" = {
+      location         = "eastus"
+      resource_group   = "my-resource-group"
+      network_interface_name = "my-nic2"
+      size             = "Standard_B2s"
+      admin_username   = "myuser2"
+      admin_password   = "mypassword2"
     }
   }
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "example"
-  location = "westus"
-}
 
 
-resource "azurerm_network_interface" "example" {
-  for_each = var.vm_details
+resource "azurerm_virtual_machine" "vm" {
+  for_each = var.vm_configurations
 
-  name                = "example-nic-${each.key}"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  name                  = each.key
+  location              = each.value.location
+  resource_group_name   = each.value.resource_group
+  network_interface_ids = [azurerm_network_interface.this[each.value.network_interface_name].id]
 
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = "10.0.0.0/24"
-    private_ip_address_allocation = "Dynamic"
+  vm_size               = each.value.size
+
+  storage_os_disk {
+    name              = "${each.key}-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
   }
-}
-# resource "azurerm_network_interface" "example" {
-#   for_each = var.vm_details
-#   name                = "example-nic-${each.key}"
-#   location            = azurerm_resource_group.example.location
-#   resource_group_name = azurerm_resource_group.example.name
-#   ip_configuration {
-#     name                          = "internal"
-#     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
-#     private_ip_address_allocation = "Dynamic"
-#   }
-#   }
 
- 
-
-resource "azurerm_virtual_machine" "example" {
-  for_each = var.vm_details
-  name                  = each.value.name
-  location              = azurerm_resource_group.example.location
-  resource_group_name   = azurerm_resource_group.example.name
-  vm_size               = each.value.vm_size
-  network_interface_ids = [azurerm_network_interface.example[each.key].id]
-
-storage_image_reference {
+  storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
 
-storage_os_disk {
-    name              = "${each.value.name}-os-disk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-#     managed_disk_type = each.value.disk_type
+  os_profile {
+    computer_name  = each.key
+    admin_username = each.value.admin_username
+    admin_password = each.value.admin_password
   }
 
-
-os_profile {
-  computer_name  = each.value.name
-  admin_username = "abhinav"
-  admin_password = "abhinav123"
-
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
 }
+
+
+
+resource "azurerm_network_interface" "this" {
+  for_each = var.network_interface_configurations
+
+  name                = each.key
+  location            = each.value.location
+  resource_group_name = each.value.resource_group
+
+  ip_configuration {
+    name                          = "ipconfig1"
+    subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
+    private_ip_address_allocation = "Dynamic"
+  }
 }
+
+
+variable "network_interface_configurations" {
+  type = map(object({
+    location         = string
+    resource_group   = string
+    subnet_name      = string
+  }))
+  default = {
+    "my-nic1" = {
+      location         = "eastus"
+      resource_group   = "my-resource-group"
+      subnet_name      = "my-subnet1"
+    },
+    "my-nic2" = {
+      location        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Azure Provider
+# terraform {
+#   required_providers {
+#     azurerm = {
+#       source  = "hashicorp/azurerm"
+#       version = "=3.0.0"
+#     }
+#   }
+# }
+
+# # Configure the Microsoft Azure Provider
+# provider "azurerm" {
+#   features {}
+# }
+
+
+# variable "vm_details" {
+#   type = map(object({
+#     resource_group_name = string
+#     name        = string
+#     vm_size     = string
+#     subnet_id   = string 
+#     admin_username = string
+#     admin_password = string
+#   }))
+
+#   default = {
+#     vm1 = {
+#         resource_group_name = "example"
+#       name = "vm1"
+#       vm_size = "Standard_B1s"
+#       subnet_id = "10.0.0.0/24"
+#       admin_username = "abhinav"
+#       admin_password = "abhinav123"
+#     }
+#     vm2 = {
+#         resource_group_name = "example"
+#       name = "vm2"
+#       vm_size = "Standard_B1s"
+#       subnet_id = "10.0.0.0/24"
+#       admin_username = "abhinav"
+#       admin_password = "abhinav123"
+#     }
+#   }
+# }
+
+# resource "azurerm_resource_group" "example" {
+#   name     = "example"
+#   location = "westus"
+# }
+
+
+# resource "azurerm_network_interface" "example" {
+#   for_each = var.vm_details
+
+#   name                = "example-nic-${each.key}"
+#   location            = azurerm_resource_group.example.location
+#   resource_group_name = azurerm_resource_group.example.name
+
+#   ip_configuration {
+#     name                          = "internal"
+#     subnet_id                     = 
+#     private_ip_address_allocation = "Dynamic"
+#   }
+# }
+# # resource "azurerm_network_interface" "example" {
+# #   for_each = var.vm_details
+# #   name                = "example-nic-${each.key}"
+# #   location            = azurerm_resource_group.example.location
+# #   resource_group_name = azurerm_resource_group.example.name
+# #   ip_configuration {
+# #     name                          = "internal"
+# #     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
+# #     private_ip_address_allocation = "Dynamic"
+# #   }
+# #   }
+
+ 
+
+# resource "azurerm_virtual_machine" "example" {
+#   for_each = var.vm_details
+#   name                  = each.value.name
+#   location              = azurerm_resource_group.example.location
+#   resource_group_name   = azurerm_resource_group.example.name
+#   vm_size               = each.value.vm_size
+#   network_interface_ids = [azurerm_network_interface.example[each.key].id]
+
+# storage_image_reference {
+#     publisher = "Canonical"
+#     offer     = "UbuntuServer"
+#     sku       = "16.04-LTS"
+#     version   = "latest"
+#   }
+
+# storage_os_disk {
+#     name              = "${each.value.name}-os-disk"
+#     caching           = "ReadWrite"
+#     create_option     = "FromImage"
+# #     managed_disk_type = each.value.disk_type
+#   }
+
+
+# os_profile {
+#   computer_name  = each.value.name
+#   admin_username = "abhinav"
+#   admin_password = "abhinav123"
+
+# }
+# }
 
 
 
