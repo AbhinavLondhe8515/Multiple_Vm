@@ -29,6 +29,7 @@ variable "vm_details" {
         resource_group_name = "example"
       name = "vm1"
       vm_size = "Standard_B1s"
+      subnet_id = "10.0.0.0/24"
       admin_username = "abhinav"
       admin_password = "abhinav123"
     }
@@ -36,6 +37,7 @@ variable "vm_details" {
         resource_group_name = "example"
       name = "vm2"
       vm_size = "Standard_B1s"
+      subnet_id = "10.0.0.0/24"
       admin_username = "abhinav"
       admin_password = "abhinav123"
     }
