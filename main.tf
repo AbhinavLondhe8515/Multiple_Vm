@@ -19,6 +19,7 @@ variable "vm_details" {
     resource_group_name = string
     name        = string
     vm_size     = string
+    subnet_id   = string 
     admin_username = string
     admin_password = string
   }))
@@ -47,22 +48,19 @@ resource "azurerm_resource_group" "example" {
 }
 
 
-resource "azurerm_network_interface" "this" {
-  for_each = var.network_interface_configurations
+resource "azurerm_network_interface" "example" {
+  for_each = var.vm_details
 
-  name                = each.key
-  location            = each.value.location
-  resource_group_name = each.value.resource_group
+  name                = "example-nic-${each.key}"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 
   ip_configuration {
-    name                          = "ipconfig1"
+    name                          = "internal"
     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
     private_ip_address_allocation = "Dynamic"
   }
 }
-
-
-
 # resource "azurerm_network_interface" "example" {
 #   for_each = var.vm_details
 #   name                = "example-nic-${each.key}"
