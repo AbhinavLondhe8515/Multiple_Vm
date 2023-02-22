@@ -53,17 +53,10 @@ resource "azurerm_network_interface" "example" {
   resource_group_name = azurerm_resource_group.example.name
   ip_configuration {
     name                          = "internal"
-   
+    subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
     private_ip_address_allocation = "Dynamic"
   }
-  
   }
-  
-  resource "azurerm_subnet" "subnet" {
-   subnet_id                      = azurerm_subnet.subnet.id
-
-
-}
 
  
 
