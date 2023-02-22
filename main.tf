@@ -94,22 +94,22 @@ resource "azurerm_virtual_machine" "this" {
   location              = each.value.location
   resource_group_name   = each.value.resource_group
   network_interface_ids = [azurerm_network_interface.this[each.value.network_interface_name].id]
-
   vm_size               = each.value.size
-}
+    storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+  
   storage_os_disk {
     name              = "${each.key}-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
-
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
+}
+  
 
  
 
