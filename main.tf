@@ -96,7 +96,7 @@ resource "azurerm_virtual_machine" "this" {
   network_interface_ids = [azurerm_network_interface.this[each.value.network_interface_name].id]
 
   vm_size               = each.value.size
-
+}
   storage_os_disk {
     name              = "${each.key}-osdisk"
     caching           = "ReadWrite"
