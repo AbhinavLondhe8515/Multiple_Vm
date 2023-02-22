@@ -27,9 +27,67 @@ variable "vm_configurations" {
   }
 }
 
+variable "network_interface_configurations" {
+  type = map(object({
+    location         = string
+    resource_group   = string
+    subnet_name      = string
+  }))
+  default = {
+    "my-nic1" = {
+      location         = "eastus"
+      resource_group   = "my-resource-group"
+      subnet_name      = "my-subnet1"
+    },
+    "my-nic2" = {
+      location         = "eastus"
+      resource_group   = "my-resource-group"
+      subnet_name      = "my-subnet2"
+    }
+  }
+}
 
+resource "azurerm_network_interface" "this" {
+  for_each = var.network_interface_configurations
 
-resource "azurerm_virtual_machine" "vm" {
+  name                = each.key
+  location            = each.value.location
+  resource_group_name = each.value.resource_group
+
+  ip_configuration {
+    name                          = "ipconfig1"
+    subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_subnet" "this" {
+  for_each = var.subnet_configurations
+
+  name                 = each.key
+  resource_group_name  = each.value.resource_group
+  virtual_network_name = azurerm_virtual_network.this[each.value.virtual_network_name].name
+  address_prefixes     = [each.value.address_prefix]
+}
+
+resource "azurerm_virtual_network" "this" {
+  for_each = var.virtual_network_configurations
+
+  name                = each.key
+  location            = each.value.location
+  resource_group_name = each.value.resource_group
+
+  address_space {
+    address_prefixes = [each.value.address_space]
+  }
+
+  subnets {
+    name           = each.value.subnet_name
+    address_prefix = each.value.subnet_address_prefix
+  }
+}
+
+resource "azurerm_virtual_machine" "this" {
   for_each = var.vm_configurations
 
   name                  = each.key
@@ -53,52 +111,7 @@ resource "azurerm_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  os_profile {
-    computer_name  = each.key
-    admin_username = each.value.admin_username
-    admin_password = each.value.admin_password
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-}
-
-
-
-resource "azurerm_network_interface" "this" {
-  for_each = var.network_interface_configurations
-
-  name                = each.key
-  location            = each.value.location
-  resource_group_name = each.value.resource_group
-
-  ip_configuration {
-    name                          = "ipconfig1"
-    subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
-
-variable "network_interface_configurations" {
-  type = map(object({
-    location         = string
-    resource_group   = string
-    subnet_name      = string
-  }))
-  default = {
-    "my-nic1" = {
-      location         = "eastus"
-      resource_group   = "my-resource-group"
-      subnet_name      = "my-subnet1"
-    },
-    "my-nic2" = {
-      location         = "eastus"
-      resource_group   = "my-resource-group"
-      subnet_name      = "my-subnet2"
-
-
+ 
 
 
 
