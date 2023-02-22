@@ -138,8 +138,7 @@ variable "network_interface_configurations" {
 
 
 
-
-# # Azure Provider
+# Azure Provider
 # terraform {
 #   required_providers {
 #     azurerm = {
@@ -148,8 +147,8 @@ variable "network_interface_configurations" {
 #     }
 #   }
 # }
-
-# # Configure the Microsoft Azure Provider
+      
+# Configure the Microsoft Azure Provider
 # provider "azurerm" {
 #   features {}
 # }
@@ -204,17 +203,17 @@ variable "network_interface_configurations" {
 #     private_ip_address_allocation = "Dynamic"
 #   }
 # }
-# # resource "azurerm_network_interface" "example" {
-# #   for_each = var.vm_details
-# #   name                = "example-nic-${each.key}"
-# #   location            = azurerm_resource_group.example.location
-# #   resource_group_name = azurerm_resource_group.example.name
-# #   ip_configuration {
-# #     name                          = "internal"
-# #     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
-# #     private_ip_address_allocation = "Dynamic"
-# #   }
-# #   }
+# resource "azurerm_network_interface" "example" {
+#   for_each = var.vm_details
+#   name                = "example-nic-${each.key}"
+#   location            = azurerm_resource_group.example.location
+#   resource_group_name = azurerm_resource_group.example.name
+#   ip_configuration {
+#     name                          = "internal"
+#     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
+#     private_ip_address_allocation = "Dynamic"
+#   }
+#   }
 
  
 
@@ -237,7 +236,7 @@ variable "network_interface_configurations" {
 #     name              = "${each.value.name}-os-disk"
 #     caching           = "ReadWrite"
 #     create_option     = "FromImage"
-# #     managed_disk_type = each.value.disk_type
+#     managed_disk_type = each.value.disk_type
 #   }
 
 
@@ -328,7 +327,7 @@ variable "network_interface_configurations" {
 
 
 
-# # Azure Provider
+# Azure Provider
 # terraform {
 #   required_providers {
 #     azurerm = {
@@ -338,7 +337,7 @@ variable "network_interface_configurations" {
 #   }
 # }
 
-# # Configure the Microsoft Azure Provider
+# Configure the Microsoft Azure Provider
 # provider "azurerm" {
 #   features {}
 # }
@@ -421,12 +420,3 @@ variable "network_interface_configurations" {
 #     vm_size = each.value["size"]
 #   }
 # }
-
-# # resource "azurerm_network_interface" "example" {
-# #   for_each = var.vms
-
-#   name                = "${each.value["name"]}-nic"
-#   location            = azurerm_
-
-      
-      
