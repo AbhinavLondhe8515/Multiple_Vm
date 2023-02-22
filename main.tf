@@ -13,16 +13,16 @@ variable "vm_configurations" {
       resource_group   = "my-resource-group"
       network_interface_name = "my-nic1"
       size             = "Standard_B2s"
-      admin_username   = "myuser1"
-      admin_password   = "mypassword1"
+      admin_username   = "abhinav"
+      admin_password   = "abhinav123"
     },
     "vm2" = {
       location         = "eastus"
       resource_group   = "my-resource-group"
       network_interface_name = "my-nic2"
       size             = "Standard_B2s"
-      admin_username   = "myuser2"
-      admin_password   = "mypassword2"
+      admin_username   = "abhinav"
+      admin_password   = "abhinav123"
     }
   }
 }
@@ -94,8 +94,9 @@ variable "network_interface_configurations" {
       subnet_name      = "my-subnet1"
     },
     "my-nic2" = {
-      location        
-
+      location         = "eastus"
+      resource_group   = "my-resource-group"
+      subnet_name      = "my-subnet2"
 
 
 
