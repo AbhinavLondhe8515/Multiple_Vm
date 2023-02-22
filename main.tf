@@ -46,17 +46,34 @@ resource "azurerm_resource_group" "example" {
   location = "westus"
 }
 
-resource "azurerm_network_interface" "example" {
-  for_each = var.vm_details
-  name                = "example-nic-${each.key}"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+
+resource "azurerm_network_interface" "this" {
+  for_each = var.network_interface_configurations
+
+  name                = each.key
+  location            = each.value.location
+  resource_group_name = each.value.resource_group
+
   ip_configuration {
-    name                          = "internal"
+    name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
     private_ip_address_allocation = "Dynamic"
   }
-  }
+}
+
+
+
+# resource "azurerm_network_interface" "example" {
+#   for_each = var.vm_details
+#   name                = "example-nic-${each.key}"
+#   location            = azurerm_resource_group.example.location
+#   resource_group_name = azurerm_resource_group.example.name
+#   ip_configuration {
+#     name                          = "internal"
+#     subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
+#     private_ip_address_allocation = "Dynamic"
+#   }
+#   }
 
  
 
