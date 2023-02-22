@@ -425,5 +425,8 @@ variable "network_interface_configurations" {
 # # resource "azurerm_network_interface" "example" {
 # #   for_each = var.vms
 
-# #   name                = "${each.value["name"]}-nic"
-# #   location            = azurerm_
+#   name                = "${each.value["name"]}-nic"
+#   location            = azurerm_
+
+      
+      
