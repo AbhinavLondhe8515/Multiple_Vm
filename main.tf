@@ -59,7 +59,7 @@ resource "azurerm_network_interface" "example" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.this[each.value.subnet_name].id
+    subnet_id                     = "10.0.0.0/24"
     private_ip_address_allocation = "Dynamic"
   }
 }
