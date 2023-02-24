@@ -71,7 +71,8 @@ resource "azurerm_subnet" "this" {
 }
 
 resource "azurerm_virtual_network" "this" {
-  for_each = var.virtual_network_configurations {
+  for_each = var.virtual_network_configurations 
+  
   }
    address_space {
     address_prefixe = "10.0.1.0/24"
@@ -88,7 +89,7 @@ resource "azurerm_virtual_network" "this" {
     address_prefix = each.value.subnet_address_prefix
     
   }
-}
+
 
 resource "azurerm_virtual_machine" "this" {
   for_each = var.vm_configurations
@@ -113,9 +114,6 @@ resource "azurerm_virtual_machine" "this" {
   }
 }
   
-
- 
-
 
 
 
