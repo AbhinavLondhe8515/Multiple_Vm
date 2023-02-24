@@ -79,13 +79,13 @@ resource "azurerm_virtual_network" "this" {
   location            = each.value.location
   resource_group_name = each.value.resource_group
  
-   address_space {
-    address_prefixe = "10.0.1.0/24"
+  address_space {
+      address_prefix = "10.0.1.0/24"
   }
   
   subnet {
-    name           = each.value.subnet_name
-    address_prefix = each.value.subnet_address_prefix
+       name           = each.value.subnet_name
+       address_prefix = each.value.subnet_address_prefix
      }
   }
 
