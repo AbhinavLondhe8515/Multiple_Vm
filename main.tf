@@ -71,13 +71,12 @@ resource "azurerm_subnet" "this" {
 }
 
 resource "azurerm_virtual_network" "this" {
-  for_each = var.virtual_network_configurations {
+  for_each = var.virtual_network_configurations 
 
   name                = each.key
   location            = each.value.location
   resource_group_name = each.value.resource_group
-  }
-
+  
 
   subnet {
     name           = each.value.subnet_name
