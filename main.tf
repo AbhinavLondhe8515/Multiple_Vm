@@ -80,7 +80,7 @@ resource "azurerm_virtual_network" "this" {
   resource_group_name = each.value.resource_group
  
   address_space {
-      address_prefix = "10.0.1.0/24"
+      address_prefix  = each.value.subnet_address_prefix
   }
   
   subnet {
